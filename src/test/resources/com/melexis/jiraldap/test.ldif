@@ -1,0 +1,33 @@
+dn: ou=groups,o=sevenSeas
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+description: Contains entries which describe groups (crews, for instance)
+
+dn: ou=people,o=sevenSeas
+objectClass: organizationalUnit
+objectClass: top
+ou: people
+description: Contains entries which describe persons (seamen)
+
+dn: uid=abc,ou=people,o=sevenSeas
+objectClass: inetOrgPerson
+objectClass: top
+cn: Alice
+sn: Botticelli
+mail: abc@sevenseas.com
+
+dn: uid=bde,ou=people,o=sevenSeas
+objectClass: inetOrgPerson
+objectClass: top
+cn: Bob
+sn: Detroit
+mail: bde@sevenseas.com
+
+dn: uid=cef,ou=people,o=sevenSeas
+objectClass: inetOrgPerson
+objectClass: top
+cn: Charles
+sn: Earphones
+mail: cef@sevenseas.com
+

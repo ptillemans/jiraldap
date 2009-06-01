@@ -18,9 +18,9 @@ public class JiraUserSyncherTest {
 
     private Set<User> createUsers() {
         Set users = new HashSet<User>();
-        users.add(new User("abc", "Alice Botticelli", "abc@xtrion.be"));
-        users.add(new User("bde", "Bob Detroit", "bde@xtrion.be"));
-        users.add(new User("cef", "Charles Earphones", "cef@xtrion.be"));
+        users.add(new User("abc", "Alice Botticelli", "abc@sevenseas.com"));
+        users.add(new User("bde", "Bob Detroit", "bde@sevenseas.com"));
+        users.add(new User("cef", "Charles Earphones", "cef@sevenseas.com"));
         return users;
     }
 
@@ -34,7 +34,7 @@ public class JiraUserSyncherTest {
 
             {
                 users = createUsers();
-                users.add(new User("new", "New User", "new@xtrion.be"));
+                users.add(new User("new", "New User", "new@sevenseas.com"));
             }
 
             public Set<User> getUsers() {

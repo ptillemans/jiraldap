@@ -13,6 +13,7 @@ description: Contains entries which describe persons (seamen)
 dn: uid=abc,ou=people,o=sevenSeas
 objectClass: inetOrgPerson
 objectClass: top
+uid: abc
 cn: Alice
 sn: Botticelli
 mail: abc@sevenseas.com
@@ -20,6 +21,7 @@ mail: abc@sevenseas.com
 dn: uid=bde,ou=people,o=sevenSeas
 objectClass: inetOrgPerson
 objectClass: top
+uid: bde
 cn: Bob
 sn: Detroit
 mail: bde@sevenseas.com
@@ -27,6 +29,7 @@ mail: bde@sevenseas.com
 dn: uid=cef,ou=people,o=sevenSeas
 objectClass: inetOrgPerson
 objectClass: top
+uid: cef
 cn: Charles
 sn: Earphones
 mail: cef@sevenseas.com

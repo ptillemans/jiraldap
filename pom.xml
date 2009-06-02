@@ -19,6 +19,19 @@
             </plugin>
         </plugins>
     </build>
+   	<distributionManagement>
+	  <repository>
+	    <id>nexus</id>
+	    <name>Internal Releases</name>
+	    <url>http://nexus.colo.elex.be:8081/nexus/content/repositories/releases</url>
+	  </repository>
+	  <!-- use the following if you ARE using a snapshot version. -->
+	  <snapshotRepository>
+	    <id>nexus</id>
+	    <name>Internal Snapshots</name>
+	    <url>http://nexus.colo.elex.be:8081/nexus/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	</distributionManagement>
     <repositories>
         <repository>
             <id>com.neuri.tdd</id>
@@ -36,11 +49,13 @@
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-all</artifactId>
             <version>1.1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.neuri.tdd</groupId>
             <artifactId>fitnesserunner</artifactId>
             <version>1.0.7</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -69,6 +84,11 @@
             <groupId>com.google.code.guice</groupId>
             <artifactId>guice</artifactId>
             <version>1.0</version>
+        </dependency>
+       <dependency>
+            <groupId>org.easymock</groupId>
+            <artifactId>easymock</artifactId>
+            <version>2.4</version>
         </dependency>
     </dependencies>
 </project>

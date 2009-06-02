@@ -6,9 +6,9 @@
 package com.melexis.jiraldap;
 
 import com.dolby.jira.net.soap.jira.JiraSoapService;
-import com.dolby.jira.net.soap.jira.JiraSoapServiceServiceLocator;
 import com.dolby.jira.net.soap.jira.RemoteGroup;
 import com.dolby.jira.net.soap.jira.RemoteUser;
+import com.google.inject.name.Named;
 import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +27,11 @@ public class JiraServiceImplementation implements JiraService {
     private String token;
 
 
-    public JiraServiceImplementation(JiraSoapService svc, String username, String password) throws RemoteException {
+    public JiraServiceImplementation(JiraSoapService svc,
+            @Named(value="jira.server.user") String username,
+            @Named(value="jira.server.pasword") String password
+            ) throws RemoteException {
+        jira = svc;
         token = jira.login(username, password);
     }
 

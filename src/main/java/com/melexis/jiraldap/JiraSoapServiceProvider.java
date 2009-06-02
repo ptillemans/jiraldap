@@ -9,6 +9,7 @@ import com.dolby.jira.net.soap.jira.JiraSoapService;
 import com.dolby.jira.net.soap.jira.JiraSoapServiceServiceLocator;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.name.Named;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.rpc.ServiceException;
@@ -22,7 +23,7 @@ public class JiraSoapServiceProvider implements Provider<JiraSoapService> {
     private String jiraEndPoint;
 
     @Inject
-    public JiraSoapServiceProvider(String jiraEndPoint) {
+    public JiraSoapServiceProvider(@Named(value="jira.server.endpoint") String jiraEndPoint) {
         this.jiraEndPoint = jiraEndPoint;
     }
 

@@ -60,5 +60,15 @@
             <version>1.0.2</version>
             <scope>test</scope>
         </dependency>
+       <dependency>
+            <groupId>com.dolby.jira.net</groupId>
+            <artifactId>jira-soap</artifactId>
+            <version>1.0-13.3.2</version>
+        </dependency>
+       <dependency>
+            <groupId>com.google.code.guice</groupId>
+            <artifactId>guice</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

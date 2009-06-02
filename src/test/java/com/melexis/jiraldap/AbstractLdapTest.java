@@ -27,7 +27,7 @@ import org.apache.directory.server.unit.AbstractServerTest;
  *
  * @author pti
  */
-public class AbstractLdapTest extends AbstractServerTest {
+public abstract class AbstractLdapTest extends AbstractServerTest {
 
     public AbstractLdapTest() {
     }

@@ -33,12 +33,12 @@ public class JiraLdapModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(JiraSoapService.class).toProvider(JiraSoapServiceProvider.class);
         try {
             Names.bindProperties(binder(), loadProperties());
         } catch (Exception ex) {
             Logger.getLogger(JiraLdapModule.class.getName()).log(Level.SEVERE, "Unable to load " + PROPERTIES_FILE, ex);
         }
+        bind(JiraSoapService.class).toProvider(JiraSoapServiceProvider.class);
     }
 
 }

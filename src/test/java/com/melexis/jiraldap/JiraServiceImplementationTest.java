@@ -8,12 +8,9 @@ package com.melexis.jiraldap;
 import com.dolby.jira.net.soap.jira.JiraSoapService;
 import com.dolby.jira.net.soap.jira.RemoteGroup;
 import com.dolby.jira.net.soap.jira.RemoteUser;
-import com.melexis.jiraldap.User;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 import java.util.Set;
 import junit.framework.TestCase;
-import org.hamcrest.collection.IsCollectionContaining;
 import static org.easymock.EasyMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -25,8 +22,13 @@ import static org.hamcrest.Matchers.*;
  */
 public class JiraServiceImplementationTest extends TestCase {
 
+    static final String username = "dummy";
+    static final String password = "secret";
+    static final String token = "token";
+
     JiraSoapService jiraSoapSvc;
     RemoteGroup group;
+    JiraService jira;
 
     private RemoteUser[] createRemoteUsers() {
         RemoteUser[] users = new RemoteUser[3];
@@ -49,22 +51,25 @@ public class JiraServiceImplementationTest extends TestCase {
     }
 
     @Override
-    public void setUp() {
+    public void setUp() throws RemoteException {
         jiraSoapSvc = createMock(JiraSoapService.class);
+        expect(jiraSoapSvc.login(username,password)).andReturn(token);
         group = new RemoteGroup();
         group.setUsers(createRemoteUsers());
     }
 
+    public void tearDown() {
+        jiraSoapSvc = null;
+        group = null;
+        jira = null;
+    }
+
     public void testGetUsers() throws RemoteException {
-        final String username = "dummy";
-        final String password = "secret";
-        final String token = "token";
         
-        expect(jiraSoapSvc.login(username,password)).andReturn(token);
         expect(jiraSoapSvc.getGroup(token,"jira-users")).andReturn(group);
         replay(jiraSoapSvc);
 
-        JiraService jira = new JiraServiceImplementation(jiraSoapSvc, username, password);
+        jira = new JiraServiceImplementation(jiraSoapSvc, username, password);
         Set<User> users = jira.getUsers();
 
         verify(jiraSoapSvc);
@@ -73,5 +78,25 @@ public class JiraServiceImplementationTest extends TestCase {
         assertThat(users,hasItem(new User("abc","Alice Botticelli","abc@sevenseas.com")));
         assertThat(users,hasItem(new User("bde","Bob Detroit","bde@sevenseas.com")));
         assertThat(users,hasItem(new User("cef","Charles Earphones","cef@sevenseas.com")));
+    }
+
+    public void testAdduser() throws RemoteException {
+        User user = new User("new","New User", "new@shiny.com");
+        RemoteUser rUser = new RemoteUser();
+        rUser.setName(user.getUid());
+        rUser.setFullname(user.getName());
+        rUser.setEmail(user.getEmail());
+
+        expect(jiraSoapSvc.createUser(eq(token)
+                , eq(user.getUid())
+                , (String)anyObject()
+                , eq(user.getName())
+                , eq(user.getEmail()))).andReturn(rUser);
+        replay(jiraSoapSvc);
+
+        jira = new JiraServiceImplementation(jiraSoapSvc, username, password);
+        jira.addUser(user);
+        verify(jiraSoapSvc);
+
     }
 }

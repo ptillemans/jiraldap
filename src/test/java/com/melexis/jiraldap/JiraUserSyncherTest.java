@@ -7,8 +7,9 @@ package com.melexis.jiraldap;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
+import static org.easymock.EasyMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -25,7 +26,7 @@ public class JiraUserSyncherTest {
     }
 
     @Test
-    public void testCreateUsers() {
+    public void testSyncUsers() {
 
         LdapService ldap = new LdapService() {
 
@@ -41,6 +42,8 @@ public class JiraUserSyncherTest {
                 return users;
             }
         };
+
+        final Set<User> newUsers = new HashSet();
         JiraService jira = new JiraService() {
 
             private Set<User> users;
@@ -53,11 +56,16 @@ public class JiraUserSyncherTest {
             public Set<User> getUsers() {
                 return users;
             }
+
+            public void addUser(User user) {
+                newUsers.add(user);
+            }
         };
 
         JiraUserSyncher jus = new JiraUserSyncher(ldap, jira);
 
-        Set<User> newUsers = jus.getNewUsers();
+        
+        jus.syncUsers();
 
         assertThat(newUsers.size(), is(1));
 

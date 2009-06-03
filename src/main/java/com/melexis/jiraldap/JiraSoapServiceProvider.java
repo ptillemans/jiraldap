@@ -23,7 +23,7 @@ public class JiraSoapServiceProvider implements Provider<JiraSoapService> {
     private String jiraEndPoint;
 
     @Inject
-    public JiraSoapServiceProvider(@Named(value="jira.server.endpoint") String jiraEndPoint) {
+    public JiraSoapServiceProvider(@Named("jira.server.endpoint") String jiraEndPoint) {
         this.jiraEndPoint = jiraEndPoint;
     }
 

@@ -5,6 +5,7 @@
 
 package com.melexis.jiraldap;
 
+import com.google.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,22 +17,24 @@ class JiraUserSyncher {
     private LdapService ldap;
     private JiraService jira;
 
+    @Inject
     JiraUserSyncher(LdapService ldap, JiraService jira) {
         this.ldap = ldap;
         this.jira = jira;
     }
 
-    Set<User> getNewUsers() {
-        Set<User> rslt = new HashSet<User>();
-        Set<User> jiraUsers = jira.getUsers();
+    private Set<User> getNewUsers() {
+        Set<User> rslt = ldap.getUsers();
 
-        for (User user1 : ldap.getUsers()) {
-            if (! jiraUsers.contains(user1)) {
-                rslt.add(user1);
-            }
-        }
+        rslt.removeAll(jira.getUsers());
         
         return rslt;
+    }
+
+    void syncUsers() {
+        for(User user:getNewUsers()) {
+            jira.addUser(user);
+        }
     }
 
 }

@@ -6,11 +6,15 @@
 package com.melexis.jiraldap;
 
 import com.dolby.jira.net.soap.jira.JiraSoapService;
+import com.dolby.jira.net.soap.jira.RemoteAuthenticationException;
 import com.dolby.jira.net.soap.jira.RemoteGroup;
+import com.dolby.jira.net.soap.jira.RemotePermissionException;
 import com.dolby.jira.net.soap.jira.RemoteUser;
+import com.dolby.jira.net.soap.jira.RemoteValidationException;
 import com.google.inject.name.Named;
 import java.rmi.RemoteException;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,14 +29,16 @@ public class JiraServiceImplementation implements JiraService {
     JiraSoapService jira = null;
 
     private String token;
+    private Random rand;
 
 
     public JiraServiceImplementation(JiraSoapService svc,
-            @Named(value="jira.server.user") String username,
-            @Named(value="jira.server.pasword") String password
+            @Named("jira.server.user") String username,
+            @Named("jira.server.pasword") String password
             ) throws RemoteException {
         jira = svc;
         token = jira.login(username, password);
+        rand = new Random();
     }
 
     private RemoteUser[] getRemoteUsers() throws ServiceException, RemoteException {
@@ -52,6 +58,14 @@ public class JiraServiceImplementation implements JiraService {
             Logger.getLogger(JiraServiceImplementation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return users;
+    }
+
+    public void addUser(User user) {
+        try {
+            jira.createUser(token, user.getUid(), Long.toHexString(rand.nextLong()), user.getName(), user.getEmail());
+        } catch (RemoteException ex) {
+            Logger.getLogger(JiraServiceImplementation.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

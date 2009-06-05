@@ -9,13 +9,13 @@ package com.melexis.jiraldap;
  *
  * @author pti
  */
-class User {
+class LdapUser {
 
     private String uid;
     private String name;
     private String email;
 
-    public User(String uid, String name, String email) {
+    public LdapUser(String uid, String name, String email) {
         this.uid = uid;
         this.name = name;
         this.email = email;
@@ -47,7 +47,7 @@ class User {
 
     @Override
     public boolean equals(Object o) {
-        User user = (User)o;
+        LdapUser user = (LdapUser)o;
         boolean rslt = true;
         rslt = rslt && user.getUid().equals(uid);
         rslt = rslt && user.getEmail().equals(email);

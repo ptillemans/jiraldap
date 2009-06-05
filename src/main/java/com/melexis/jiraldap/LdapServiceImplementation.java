@@ -70,23 +70,23 @@ public class LdapServiceImplementation implements LdapService {
         }
     }
 
-    private User createUser(SearchResult entry) throws NamingException {
+    private LdapUser createUser(SearchResult entry) throws NamingException {
         Attributes attributes = entry.getAttributes();
         String uid = getValue(attributes,"uid");
         String name = getValue(attributes,"cn")
                       + " "
                       + getValue(attributes,"sn");
         String mail = getValue(attributes,"mail");
-        User user = new User(uid,name,mail);
+        LdapUser user = new LdapUser(uid,name,mail);
         return user;
     }
 
-    private Set<User> searchUsers(int scope) throws NamingException, NamingException {
+    private Set<LdapUser> searchUsers(int scope) throws NamingException, NamingException {
         SearchControls controls = new SearchControls();
         controls.setSearchScope(scope);
         NamingEnumeration result = context.search(getBase(), getFilter(), controls);
         // collect all results
-        HashSet<User> users = new HashSet<User>();
+        HashSet<LdapUser> users = new HashSet<LdapUser>();
         while (result.hasMore()) {
             SearchResult entry = (SearchResult) result.next();
             users.add(createUser(entry));
@@ -94,8 +94,8 @@ public class LdapServiceImplementation implements LdapService {
         return users;
     }
 
-    public Set<User> getUsers() {
-        Set<User> users = new HashSet<User>();
+    public Set<LdapUser> getUsers() {
+        Set<LdapUser> users = new HashSet<LdapUser>();
         try {
             users = searchUsers(SearchControls.SUBTREE_SCOPE);
         } catch (NamingException ex) {

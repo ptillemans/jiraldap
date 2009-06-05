@@ -13,6 +13,6 @@ import java.util.Set;
  */
 interface LdapService {
 
-    public Set<User> getUsers();
+    public Set<LdapUser> getUsers();
     
 }

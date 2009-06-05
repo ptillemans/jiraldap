@@ -17,11 +17,11 @@ import static org.hamcrest.Matchers.*;
  */
 public class JiraUserSyncherTest {
 
-    private Set<User> createUsers() {
-        Set users = new HashSet<User>();
-        users.add(new User("abc", "Alice Botticelli", "abc@sevenseas.com"));
-        users.add(new User("bde", "Bob Detroit", "bde@sevenseas.com"));
-        users.add(new User("cef", "Charles Earphones", "cef@sevenseas.com"));
+    private Set<LdapUser> createUsers() {
+        Set users = new HashSet<LdapUser>();
+        users.add(new LdapUser("abc", "Alice Botticelli", "abc@sevenseas.com"));
+        users.add(new LdapUser("bde", "Bob Detroit", "bde@sevenseas.com"));
+        users.add(new LdapUser("cef", "Charles Earphones", "cef@sevenseas.com"));
         return users;
     }
 
@@ -30,34 +30,34 @@ public class JiraUserSyncherTest {
 
         LdapService ldap = new LdapService() {
 
-            private Set<User> users = new HashSet<User>();
+            private Set<LdapUser> users = new HashSet<LdapUser>();
 
 
             {
                 users = createUsers();
-                users.add(new User("new", "New User", "new@sevenseas.com"));
+                users.add(new LdapUser("new", "New User", "new@sevenseas.com"));
             }
 
-            public Set<User> getUsers() {
+            public Set<LdapUser> getUsers() {
                 return users;
             }
         };
 
-        final Set<User> newUsers = new HashSet();
+        final Set<LdapUser> newUsers = new HashSet();
         JiraService jira = new JiraService() {
 
-            private Set<User> users;
+            private Set<LdapUser> users;
 
 
             {
                 users = createUsers();
             }
 
-            public Set<User> getUsers() {
+            public Set<LdapUser> getUsers() {
                 return users;
             }
 
-            public void addUser(User user) {
+            public void addUser(LdapUser user) {
                 newUsers.add(user);
             }
         };
@@ -69,7 +69,7 @@ public class JiraUserSyncherTest {
 
         assertThat(newUsers.size(), is(1));
 
-        for (User actual : newUsers) {
+        for (LdapUser actual : newUsers) {
             assertThat(actual.getUid(), is("new"));
         }
     }

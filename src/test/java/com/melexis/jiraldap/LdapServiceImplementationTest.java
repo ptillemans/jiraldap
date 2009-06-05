@@ -34,10 +34,10 @@ public class LdapServiceImplementationTest extends AbstractLdapTest {
 
     public void testUsers() throws NamingException {
        ldap.setContext(createContext("o=sevenSeas"));
-       Set<User> users = ldap.getUsers();
+       Set<LdapUser> users = ldap.getUsers();
 
-       Map<String,User> uids = new HashMap<String,User>();
-       for (User user:users) {
+       Map<String,LdapUser> uids = new HashMap<String,LdapUser>();
+       for (LdapUser user:users) {
            uids.put(user.getUid(),user);
        }
 

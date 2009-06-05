@@ -13,8 +13,8 @@ import java.util.Set;
  */
 interface JiraService {
 
-    public void addUser(User user);
+    public void addUser(LdapUser user);
 
-    public Set<User> getUsers();
+    public List<LdapUser> getUsers();
 
 }

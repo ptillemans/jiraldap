@@ -19,19 +19,29 @@
             </plugin>
         </plugins>
     </build>
-   	<distributionManagement>
-	  <repository>
-	    <id>nexus</id>
-	    <name>Internal Releases</name>
-	    <url>http://nexus.colo.elex.be:8081/nexus/content/repositories/releases</url>
-	  </repository>
+    <scm>
+        <connection>scm:cvs:pserver:cvs.tess.elex.be:/var/cvsit:jiraldap</connection>
+        <developerConnection>scm:cvs:pserver:cvs.tess.elex.be:/var/cvsit:jiraldap</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://cvs.tess.elex.be/cgi-bin/cvsweb/it/jiraldap</url>
+    </scm>
+    <ciManagement>
+        <system>hudson</system>
+        <url>http://hudson-test.elex.be/job/jiraldap</url>
+    </ciManagement>
+    <distributionManagement>
+        <repository>
+            <id>nexus</id>
+            <name>Internal Releases</name>
+            <url>http://nexus.colo.elex.be:8081/nexus/content/repositories/releases</url>
+        </repository>
 	  <!-- use the following if you ARE using a snapshot version. -->
-	  <snapshotRepository>
-	    <id>nexus</id>
-	    <name>Internal Snapshots</name>
-	    <url>http://nexus.colo.elex.be:8081/nexus/content/repositories/snapshots</url>
-	  </snapshotRepository>
-	</distributionManagement>
+        <snapshotRepository>
+            <id>nexus</id>
+            <name>Internal Snapshots</name>
+            <url>http://nexus.colo.elex.be:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
     <repositories>
         <repository>
             <id>com.neuri.tdd</id>
@@ -69,26 +79,27 @@
             <version>1.0.2</version>
             <scope>test</scope>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.apache.directory.server</groupId>
             <artifactId>apacheds-core</artifactId>
             <version>1.0.2</version>
             <scope>test</scope>
         </dependency>
-       <dependency>
-            <groupId>com.dolby.jira.net</groupId>
-            <artifactId>jira-soap</artifactId>
-            <version>1.0-13.3.2</version>
-        </dependency>
-       <dependency>
+        <dependency>
             <groupId>com.google.code.guice</groupId>
             <artifactId>guice</artifactId>
             <version>1.0</version>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <version>2.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.jira</groupId>
+            <artifactId>atlassian-jira</artifactId>
+            <version>3.12</version>
         </dependency>
     </dependencies>
 </project>

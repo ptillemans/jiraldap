@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="MacRoman"?>
+
+<!--
+    Document   : LdapSynchConfiguration.xml
+    Created on : June 4, 2009, 2:18 PM
+    Author     : pti
+    Description:
+        Definition f the configuration parametersfor the LDAP Synchronisation
+        Service.
+-->
+
+<debugservice id="LDAPUserSyncService">
+    <description>
+    </description>
+    <properties>
+
+        <property>
+            <key>LDAP_HOST</key>
+            <name>LDAP Host (format: ldap://hostname.domain.com:389)</name>
+            <type>string</type>
+        </property>
+        <property>
+            <key>LDAP_USER</key>
+            <name>LDAP User DN</name>
+            <type>string</type>
+        </property>
+                <property>
+            <key>LDAP_PASSWORD</key>
+            <name>LDAP Password</name>
+            <type>string</type>
+        </property>
+        <property>
+            <key>LDAP_SEARCHBASE</key>
+            <name>LDAP Search Base DN</name>
+            <type>string</type>
+        </property>
+        <property>
+            <key>LDAP_FILTER</key>
+            <name>LDAP Search Filter</name>
+            <type>string</type>
+        </property>
+
+    </properties>
+</debugservice>

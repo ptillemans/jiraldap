@@ -70,18 +70,18 @@ public class JiraServiceImplementationTest extends TestCase {
         replay(jiraSoapSvc);
 
         jira = new JiraServiceImplementation(jiraSoapSvc, username, password);
-        Set<User> users = jira.getUsers();
+        Set<LdapUser> users = jira.getUsers();
 
         verify(jiraSoapSvc);
         
         assertThat(users.size(),equalTo(3));
-        assertThat(users,hasItem(new User("abc","Alice Botticelli","abc@sevenseas.com")));
-        assertThat(users,hasItem(new User("bde","Bob Detroit","bde@sevenseas.com")));
-        assertThat(users,hasItem(new User("cef","Charles Earphones","cef@sevenseas.com")));
+        assertThat(users,hasItem(new LdapUser("abc","Alice Botticelli","abc@sevenseas.com")));
+        assertThat(users,hasItem(new LdapUser("bde","Bob Detroit","bde@sevenseas.com")));
+        assertThat(users,hasItem(new LdapUser("cef","Charles Earphones","cef@sevenseas.com")));
     }
 
     public void testAdduser() throws RemoteException {
-        User user = new User("new","New User", "new@shiny.com");
+        LdapUser user = new LdapUser("new","New User", "new@shiny.com");
         RemoteUser rUser = new RemoteUser();
         rUser.setName(user.getUid());
         rUser.setFullname(user.getName());

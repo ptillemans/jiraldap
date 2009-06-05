@@ -23,8 +23,8 @@ class JiraUserSyncher {
         this.jira = jira;
     }
 
-    private Set<User> getNewUsers() {
-        Set<User> rslt = ldap.getUsers();
+    private Set<LdapUser> getNewUsers() {
+        Set<LdapUser> rslt = ldap.getUsers();
 
         rslt.removeAll(jira.getUsers());
         
@@ -32,7 +32,7 @@ class JiraUserSyncher {
     }
 
     void syncUsers() {
-        for(User user:getNewUsers()) {
+        for(LdapUser user:getNewUsers()) {
             jira.addUser(user);
         }
     }

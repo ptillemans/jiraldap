@@ -16,31 +16,31 @@ import static org.hamcrest.CoreMatchers.*;
 public class UserTest {
     @Test
     public void testEqualsIdenticalObjects() {
-        User user1 = new User("abc", "Alice Botticelli", "abc@xtrion.be");
-        User user2 = new User("abc", "Alice Botticelli", "abc@xtrion.be");
+        LdapUser user1 = new LdapUser("abc", "Alice Botticelli", "abc@xtrion.be");
+        LdapUser user2 = new LdapUser("abc", "Alice Botticelli", "abc@xtrion.be");
 
         assertThat(user1, is(user2));
     }
 
     @Test
     public void testEqualsSameObjects() {
-        User user1 = new User("abc", "Alice Botticelli", "abc@xtrion.be");
+        LdapUser user1 = new LdapUser("abc", "Alice Botticelli", "abc@xtrion.be");
 
         assertThat(user1, is(user1));
     }
 
     @Test
     public void testEqualsDifferentObjects() {
-        User user1 = new User("abc", "Alice Botticelli", "abc@xtrion.be");
+        LdapUser user1 = new LdapUser("abc", "Alice Botticelli", "abc@xtrion.be");
 
-        User user2 = new User("abo", "Alice Botticelli", "abc@xtrion.be");
+        LdapUser user2 = new LdapUser("abo", "Alice Botticelli", "abc@xtrion.be");
         assertThat(user1, not(is(user2)));
 
-        user2 = new User("abc", "Andrew Botticelli", "abc@xtrion.be");
+        user2 = new LdapUser("abc", "Andrew Botticelli", "abc@xtrion.be");
         assertThat(user1, not(is(user2)));
 
 
-        user2 = new User("abc", "Alice Botticelli", "abc@melexis.com");
+        user2 = new LdapUser("abc", "Alice Botticelli", "abc@melexis.com");
         assertThat(user1, not(is(user2)));
 
     }

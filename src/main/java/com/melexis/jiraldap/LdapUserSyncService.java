@@ -12,7 +12,8 @@ import com.atlassian.jira.service.AbstractService;
 /**
  *
  * @author pti
- */public class LdapUserSyncService extends AbstractService {
+ */
+public class LdapUserSyncService extends AbstractService {
 
     @Override
     public void run() {

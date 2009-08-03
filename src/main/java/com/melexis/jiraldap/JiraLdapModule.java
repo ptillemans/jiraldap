@@ -5,9 +5,10 @@
 
 package com.melexis.jiraldap;
 
-import com.dolby.jira.net.soap.jira.JiraSoapService;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
+import com.opensymphony.user.UserManager;
+
 import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -19,8 +20,7 @@ import java.util.logging.Logger;
  * @author pti
  */
 public class JiraLdapModule extends AbstractModule {
-    public static final String PROPERTIES_FILE = "jiraldap.properties";
-
+    private static final String PROPERTIES_FILE = "jiraldap.properties";
 
    	private static Properties loadProperties() throws Exception {
 		Properties properties = new Properties();
@@ -38,7 +38,8 @@ public class JiraLdapModule extends AbstractModule {
         } catch (Exception ex) {
             Logger.getLogger(JiraLdapModule.class.getName()).log(Level.SEVERE, "Unable to load " + PROPERTIES_FILE, ex);
         }
-        bind(JiraSoapService.class).toProvider(JiraSoapServiceProvider.class);
+        bind(UserService.class).to(UserServiceImpl.class);
+        bind(UserManager.class).toProvider(UserManagerProvider.class);
     }
 
 }

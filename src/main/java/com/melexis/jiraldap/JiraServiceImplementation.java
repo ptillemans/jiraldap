@@ -2,58 +2,62 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melexis.jiraldap;
 
-import com.google.inject.name.Named;
-import com.opensymphony.user.UserManager;
-import java.rmi.RemoteException;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.ArrayList;
+
+import com.google.inject.Inject;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.rpc.ServiceException;
 
 /**
- *
  * @author pti
  */
 public class JiraServiceImplementation implements JiraService {
 
-    private Random rand;
+    private UserService userService;
 
+    @Inject
+    public JiraServiceImplementation(UserService userService) {
+        this.userService = userService;
+    }
 
     public JiraServiceImplementation() {
-        rand = new Random();
     }
 
-    private List<LdapUser> getUsers() throws ServiceException, RemoteException {
-        UserManager um = UserManager.getInstance();
-        
-        RemoteGroup remoteGroup = jira.getGroup(token, "jira-users");
-        return List(<User>) um.getUsers();
+    public List<JiraUser> getUsers() {
+        return userService.getUsers();
     }
 
-    public Set<LdapUser> getUsers() {
-        Set<LdapUser> users = new HashSet<LdapUser>();
-        try {
-            for (RemoteUser ru : getRemoteUsers()) {
-                users.add(new LdapUser(ru.getName(),ru.getFullname(),ru.getEmail()));
-            }
-        } catch (ServiceException ex) {
-            Logger.getLogger(JiraServiceImplementation.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(JiraServiceImplementation.class.getName()).log(Level.SEVERE, null, ex);
+    public List<LdapUser> getLdapUsers() {
+        List<LdapUser> ldapUsers = new ArrayList<LdapUser>();
+        for(JiraUser user : getUsers()) {
+            ldapUsers.add(new LdapUser(user.getName(), user.getFullName(), user.getEmail()));
         }
-        return users;
+        return ldapUsers;
     }
 
-    public void addUser(LdapUser user) {
-        UserManager um = UserManager.getInstance();
-        um.
-        jira.createUser(token, user.getUid(), Long.toHexString(rand.nextLong()), user.getName(), user.getEmail());
+   public void addUser(LdapUser ldapUser) {
+
+        try {
+            JiraUser user = null;
+            try {
+                user = userService.getUser(ldapUser.getUid());
+            } catch (JiraLdapException ex) {
+                Logger.getLogger(JiraServiceImplementation.class.getName()).log(Level.FINE, "User not found, creating new one", ex);
+                user = userService.createUser(ldapUser.getUid());
+            }
+
+            user.setFullName(ldapUser.getName());
+            user.setEmail(ldapUser.getEmail());
+            user.store();
+
+        } catch (JiraLdapException e) {
+            Logger.getLogger(JiraServiceImplementation.class.getName()).log(Level.SEVERE, "Unable to find or create a user with uid=" + ldapUser.getUid(), e);
+        }
 
     }
-
 }

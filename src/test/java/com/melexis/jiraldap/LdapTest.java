@@ -22,6 +22,7 @@ public class LdapTest extends AbstractLdapTest {
 
     /**
      * Test that the partition has been correctly created
+ * @throws javax.naming.NamingException
      */
     public void testPartition() throws NamingException
     {
@@ -44,6 +45,7 @@ public class LdapTest extends AbstractLdapTest {
 
     /**
      * Test that the ldif data has correctly been imported
+ * @throws javax.naming.NamingException
      */
     public void testImport() throws NamingException
     {

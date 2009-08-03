@@ -5,7 +5,10 @@
 
 package com.melexis.jiraldap;
 
-import java.util.Set;
+import com.atlassian.jira.service.ServiceException;
+
+import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  *
@@ -15,6 +18,8 @@ interface JiraService {
 
     public void addUser(LdapUser user);
 
-    public List<LdapUser> getUsers();
+    public List<JiraUser> getUsers();
+
+    public List<LdapUser> getLdapUsers();
 
 }

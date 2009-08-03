@@ -87,13 +87,18 @@ public abstract class AbstractLdapTest extends AbstractServerTest {
         // Let's open a connection on this partition
         InitialContext initialContext = new InitialContext(env);
         // We should be able to read it
-        DirContext appRoot = (DirContext) initialContext.lookup("");
-        return appRoot;
+        return (DirContext) initialContext.lookup("");
     }
 
     /**
      * Performs a single level search from a root base and
      * returns the set of DNs found.
+      * @param filter
+     * @param partition
+     * @param base
+     * @param scope
+     * @return
+     * @throws javax.naming.NamingException
      */
     protected Set<String> searchDNs(String filter, String partition, String base, int scope) throws NamingException {
         DirContext appRoot = createContext(partition);

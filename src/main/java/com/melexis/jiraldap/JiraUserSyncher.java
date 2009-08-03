@@ -5,7 +5,9 @@
 
 package com.melexis.jiraldap;
 
+import com.atlassian.jira.service.ServiceException;
 import com.google.inject.Inject;
+import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ class JiraUserSyncher {
     private JiraService jira;
 
     @Inject
-    JiraUserSyncher(LdapService ldap, JiraService jira) {
+    public JiraUserSyncher(LdapService ldap, JiraService jira) {
         this.ldap = ldap;
         this.jira = jira;
     }
@@ -26,12 +28,12 @@ class JiraUserSyncher {
     private Set<LdapUser> getNewUsers() {
         Set<LdapUser> rslt = ldap.getUsers();
 
-        rslt.removeAll(jira.getUsers());
+        rslt.removeAll(jira.getLdapUsers());
         
         return rslt;
     }
 
-    void syncUsers() {
+    void syncUsers()  {
         for(LdapUser user:getNewUsers()) {
             jira.addUser(user);
         }

@@ -2,19 +2,16 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.melexis.jiraldap;
 
-import com.dolby.jira.net.soap.jira.JiraSoapService;
-import com.dolby.jira.net.soap.jira.RemoteGroup;
-import com.dolby.jira.net.soap.jira.RemoteUser;
 import java.rmi.RemoteException;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
-import static org.easymock.EasyMock.*;
+import static org.easymock.classextension.EasyMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-
 
 /**
  *
@@ -22,81 +19,89 @@ import static org.hamcrest.Matchers.*;
  */
 public class JiraServiceImplementationTest extends TestCase {
 
-    static final String username = "dummy";
-    static final String password = "secret";
-    static final String token = "token";
+    private JiraService jira;
+    private UserService userService;
 
-    JiraSoapService jiraSoapSvc;
-    RemoteGroup group;
-    JiraService jira;
+    private List<JiraUser> createUsers() {
+        List<JiraUser> users = new ArrayList<JiraUser>();
+        JiraUser user;
 
-    private RemoteUser[] createRemoteUsers() {
-        RemoteUser[] users = new RemoteUser[3];
+        user = new MockJiraUser("abc");
 
-        users[0] = new RemoteUser();
-        users[0].setName("abc");
-        users[0].setFullname("Alice Botticelli");
-        users[0].setEmail("abc@sevenseas.com");
-        
-        users[1] = new RemoteUser();
-        users[1].setName("bde");
-        users[1].setFullname("Bob Detroit");
-        users[1].setEmail("bde@sevenseas.com");
+        user.setFullName("Alice Botticelli");
+        user.setEmail("abc@sevenseas.com");
+        users.add(user);
 
-        users[2] = new RemoteUser();
-        users[2].setName("cef");
-        users[2].setFullname("Charles Earphones");
-        users[2].setEmail("cef@sevenseas.com");
+        user = new MockJiraUser("bde");
+        user.setFullName("Bob Detroit");
+        user.setEmail("bde@sevenseas.com");
+        users.add(user);
+
+        user = new MockJiraUser("cef");
+        user.setFullName("Charles Earphones");
+        user.setEmail("cef@sevenseas.com");
+        users.add(user);
+
         return users;
     }
 
     @Override
     public void setUp() throws RemoteException {
-        jiraSoapSvc = createMock(JiraSoapService.class);
-        expect(jiraSoapSvc.login(username,password)).andReturn(token);
-        group = new RemoteGroup();
-        group.setUsers(createRemoteUsers());
+        userService = createMock(UserService.class);
+        jira = new JiraServiceImplementation(userService);
     }
 
     public void tearDown() {
-        jiraSoapSvc = null;
-        group = null;
         jira = null;
     }
 
-    public void testGetUsers() throws RemoteException {
-        
-        expect(jiraSoapSvc.getGroup(token,"jira-users")).andReturn(group);
-        replay(jiraSoapSvc);
+    public void testGetUsers() {
 
-        jira = new JiraServiceImplementation(jiraSoapSvc, username, password);
-        Set<LdapUser> users = jira.getUsers();
+        List<JiraUser> testUsers = createUsers();
+        expect(userService.getUsers()).andReturn(testUsers);
+        replay(userService);
 
-        verify(jiraSoapSvc);
-        
-        assertThat(users.size(),equalTo(3));
-        assertThat(users,hasItem(new LdapUser("abc","Alice Botticelli","abc@sevenseas.com")));
-        assertThat(users,hasItem(new LdapUser("bde","Bob Detroit","bde@sevenseas.com")));
-        assertThat(users,hasItem(new LdapUser("cef","Charles Earphones","cef@sevenseas.com")));
+        List<JiraUser> users = jira.getUsers();
+
+        verify(userService);
+
+
+        assertThat(users.size(), equalTo(3));
+        assertThat(users, hasItem(testUsers.get(0)));
+        assertThat(users, hasItem(testUsers.get(1)));
+        assertThat(users, hasItem(testUsers.get(2)));
     }
 
-    public void testAdduser() throws RemoteException {
-        LdapUser user = new LdapUser("new","New User", "new@shiny.com");
-        RemoteUser rUser = new RemoteUser();
-        rUser.setName(user.getUid());
-        rUser.setFullname(user.getName());
-        rUser.setEmail(user.getEmail());
+    public void testAddExistingUser() throws JiraLdapException {
+        LdapUser user = new LdapUser("new", "New User", "new@shiny.com");
+        JiraUser jiraUser = createMock(JiraUser.class);
 
-        expect(jiraSoapSvc.createUser(eq(token)
-                , eq(user.getUid())
-                , (String)anyObject()
-                , eq(user.getName())
-                , eq(user.getEmail()))).andReturn(rUser);
-        replay(jiraSoapSvc);
+        expect(userService.getUser(eq(user.getUid()))).andReturn(jiraUser);
+        jiraUser.setFullName(eq(user.getName()));
+        jiraUser.setEmail(eq(user.getEmail()));
+        jiraUser.store();
+        replay(userService);
+        replay(jiraUser);
 
-        jira = new JiraServiceImplementation(jiraSoapSvc, username, password);
         jira.addUser(user);
-        verify(jiraSoapSvc);
+        verify(userService);
+        verify(jiraUser);
+    }
 
+    public void testAddNewUser() throws JiraLdapException {
+        LdapUser user = new LdapUser("new", "New User", "new@shiny.com");
+        JiraUser jiraUser = createMock(JiraUser.class);
+
+        expect(userService.getUser(eq(user.getUid()))).andThrow(new JiraLdapException("test", null));
+        expect(userService.createUser(eq(user.getUid()))).andReturn(jiraUser);
+        jiraUser.setFullName(eq(user.getName()));
+        jiraUser.setEmail(eq(user.getEmail()));
+        jiraUser.store();
+        replay(userService);
+        replay(jiraUser);
+
+        jira.addUser(user);
+        verify(userService);
+        verify(jiraUser);
     }
 }

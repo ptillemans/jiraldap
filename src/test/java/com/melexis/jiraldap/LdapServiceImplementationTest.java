@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.*;
  */
 public class LdapServiceImplementationTest extends AbstractLdapTest {
 
-    LdapServiceImplementation ldap;
+    private LdapServiceImplementation ldap;
 
     @Override
     public void setUp() throws Exception {

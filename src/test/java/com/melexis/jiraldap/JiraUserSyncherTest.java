@@ -4,12 +4,15 @@
  */
 package com.melexis.jiraldap;
 
-import java.util.HashSet;
-import java.util.Set;
-import org.junit.Test;
-import static org.easymock.EasyMock.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import org.junit.Test;
+
+import java.rmi.RemoteException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,7 +21,7 @@ import static org.hamcrest.Matchers.*;
 public class JiraUserSyncherTest {
 
     private Set<LdapUser> createUsers() {
-        Set users = new HashSet<LdapUser>();
+        Set<LdapUser> users = new HashSet<LdapUser>();
         users.add(new LdapUser("abc", "Alice Botticelli", "abc@sevenseas.com"));
         users.add(new LdapUser("bde", "Bob Detroit", "bde@sevenseas.com"));
         users.add(new LdapUser("cef", "Charles Earphones", "cef@sevenseas.com"));
@@ -43,22 +46,28 @@ public class JiraUserSyncherTest {
             }
         };
 
-        final Set<LdapUser> newUsers = new HashSet();
-        JiraService jira = new JiraService() {
-
-            private Set<LdapUser> users;
-
+        final List<LdapUser> newUsers = new ArrayList<LdapUser>();
+        JiraService jira;
+        jira = new JiraServiceImplementation() {
+            public ArrayList<JiraUser> users;
 
             {
-                users = createUsers();
+                users =  new ArrayList<JiraUser>();
+                for (LdapUser user : createUsers()) {
+                    addUser(user);
+                }
+                newUsers.clear();
             }
 
-            public Set<LdapUser> getUsers() {
-                return users;
-            }
-
+            @Override
             public void addUser(LdapUser user) {
+                users.add(new MockJiraUser(user));
                 newUsers.add(user);
+            }
+
+            @Override
+            public List<JiraUser> getUsers()  {
+               return users;
             }
         };
 

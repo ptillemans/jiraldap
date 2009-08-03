@@ -1,3 +1,9 @@
 .cvsignore
 CVS
 target
+
+/jiraldap.iws
+/jiraldap.ids
+/jiraldap.iml
+*.iml
+*.ipr

@@ -77,8 +77,7 @@ public class LdapServiceImplementation implements LdapService {
                       + " "
                       + getValue(attributes,"sn");
         String mail = getValue(attributes,"mail");
-        LdapUser user = new LdapUser(uid,name,mail);
-        return user;
+        return new LdapUser(uid,name,mail);
     }
 
     private Set<LdapUser> searchUsers(int scope) throws NamingException, NamingException {
